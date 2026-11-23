@@ -296,7 +296,7 @@ const DADOS = {
  "atualizado": "seg 23/11/2026 · 15h"
 };
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const API='__API__'+'/s/'+DADOS.id;
+const API='https://checks-time-mkt.grupo-rob-mkt.workers.dev'+'/s/'+DADOS.id;
 const KEY='daily-'+DADOS.id+'-sync';
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){st={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
