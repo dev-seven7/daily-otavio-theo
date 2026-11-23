@@ -57,6 +57,7 @@
   .dia ul{margin:0;padding-left:16px;font-size:13px;color:var(--txt2)}
   .dia li{margin-bottom:4px}
   @media (max-width:760px){.dias{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.kpi b{font-size:20px}}
+  .sync{font-weight:600}.sync.ok{color:var(--ok)}.sync.off{color:var(--todo)}
   footer{font-size:12px;color:var(--txt3);text-align:center;margin-top:10px}
 </style>
 </head>
@@ -80,7 +81,7 @@
   </section>
   <section>
     <h2>🔥 Hoje · segunda, 23/11</h2>
-    <p class="nota">Marque o que for fazendo. Fica salvo só neste navegador; no fim do dia avise a Manu do que fechou.</p>
+    <p class="nota">Marque o que for fazendo: o check vai direto pra Manu. <span id="sync" class="sync"></span></p>
     <div class="lista" id="hoje"></div>
   </section>
   <section>
@@ -141,6 +142,14 @@ const DADOS = {
    "p": false
   },
   {
+   "t": "Captação de amanhã · Ogro Black: planos da fita crepe (Reels 1) e do carimbo (Reels 2 e mix de sexta)",
+   "w": "preparar hoje",
+   "c": "caderno Ogro · Black",
+   "u": "https://dev-seven7.github.io/caderno-victorpob/#black-aquec",
+   "n": "Material: carimbo de borracha com o preço, fita crepe, papel kraft, moedas e o P.C.Q igual à foto oficial. Roteiro tempo a tempo no caderno.",
+   "p": true
+  },
+  {
    "t": "Captação de amanhã: planos, takes e ideias de vídeo pro SushiTone, o Ogro Bells e a Black Friday",
    "w": "preparar hoje",
    "c": "roteiro da captação",
@@ -170,13 +179,15 @@ const DADOS = {
    "Ter 24/11",
    [
     "⏰ Prazo: TODAS as edições da semana fechadas",
-    "Captação com Manu, Luiza e Victor: SushiTone, Ogro Bells, Black Friday"
+    "Captação com Manu, Luiza e Victor: SushiTone, Ogro Bells, Black Friday",
+    "Ogro: gravar fita crepe + carimbo na captação · editar o Reels 1"
    ]
   ],
   [
    "Qua 25/11",
    [
     "Fotos e vídeos da captação: seleção e edição",
+    "Ogro: editar o Reels 2 “O carimbo chegou”",
     "Reunião de MKT 14h às 17h"
    ]
   ],
@@ -184,7 +195,8 @@ const DADOS = {
    "Qui 26/11",
    [
     "Presencial 12h às 19h: bater cada marca por bloco e fechar a semana",
-    "Vídeos de Natal e de Black Friday pra aprovar"
+    "Vídeos de Natal e de Black Friday pra aprovar",
+    "Ogro: Reels do dia 27 pra aprovar"
    ]
   ],
   [
@@ -196,6 +208,14 @@ const DADOS = {
   ]
  ],
  "semana": [
+  {
+   "t": "Edição Ogro Black: Reels 1 “A fita crepe” (até ter 24/11 17h, ou passa pra qua 25/11) · Reels 2 “O carimbo chegou” (até qua 25/11) · Reels “O carimbo” do dia 27 (até qui 26/11)",
+   "w": "24 a 26/11",
+   "c": "caderno Ogro · Black",
+   "u": "https://dev-seven7.github.io/caderno-victorpob/#black-aquec",
+   "n": "Som do carimbo e da fita gravado de verdade. Logo oficial só na pós. Nenhum texto nos 250 px de cima nem nos 350 px de baixo. Exceção ao prazo de terça, porque depende da captação.",
+   "p": true
+  },
   {
    "t": "TODAS as edições da semana fechadas: Black Friday Øliver's e Temakeria, Réveillon, criativos Ghost e Maslow",
    "w": "até ter 24/11",
@@ -273,25 +293,44 @@ const DADOS = {
  ],
  "id": "otavio",
  "painel": "https://dev-seven7.github.io/time-marketing-rob/",
- "atualizado": "seg 23/11/2026 · 12h (pós-call)"
+ "atualizado": "seg 23/11/2026 · 15h"
 };
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KEY='daily-'+DADOS.id+'-2311';
+const API='__API__'+'/s/'+DADOS.id;
+const KEY='daily-'+DADOS.id+'-sync';
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){st={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
-const linkify=s=>esc(s).replace(/(https:\/\/[^\s]+)/g,'<a class="ref" href="$1" target="_blank" rel="noopener">abrir link</a>');
-function lista(id,arr,check,elId){
+const hash=t=>{let h=5381;for(const c of String(t))h=((h<<5)+h+c.charCodeAt(0))|0;return (h>>>0).toString(36)};
+const hoje=new Date(); const dk=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0')+'-'+String(hoje.getDate()).padStart(2,'0');
+const syncEl=()=>document.getElementById('sync');
+function setSync(ok,msg){const e=syncEl(); if(e){e.textContent=msg; e.className='sync '+(ok?'ok':'off')}}
+async function puxar(){
+  if(!API.startsWith('http'))return setSync(false,'check salvo só neste navegador');
+  try{const r=await fetch(API,{cache:'no-store'}); if(!r.ok)throw 0; const j=await r.json();
+    st={}; for(const k in j) st[k]=true; save(); render(); setSync(true,'✓ checks sincronizados com a Manu');
+  }catch(e){setSync(false,'sem conexão: check salvo só neste navegador')}
+}
+async function enviar(k,v,t){
+  st[k]=v; if(!v) delete st[k]; save();
+  if(!API.startsWith('http'))return;
+  try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k,v,t,by:DADOS.nome})}); if(!r.ok)throw 0; setSync(true,'✓ checks sincronizados com a Manu')}
+  catch(e){setSync(false,'sem conexão: esse check não chegou na Manu, tenta de novo')}
+}
+const LISTAS=[];
+function lista(id,arr,check,elId){ LISTAS.push([id,arr,check,elId]); desenha(id,arr,check,elId) }
+function desenha(id,arr,check,elId){
   const el=document.getElementById(elId||id);
-  el.innerHTML=arr.map((o,ix)=>{
-    const k=id+ix, done=!!st[k];
-    return `<div class="item${done?' done':''}">${check?`<input type="checkbox" data-k="${k}"${done?' checked':''} aria-label="feito">`:''}
+  el.innerHTML=arr.map(o=>{
+    const k=id+'-'+hash(o.t), done=!!st[k];
+    return `<div class="item${done?' done':''}">${check?`<input type="checkbox" data-k="${k}" data-t="${esc(o.t.slice(0,150))}"${done?' checked':''} aria-label="feito">`:''}
       <div class="b"><div class="t">${esc(o.t)}</div>${o.n?`<div class="n">${linkify(o.n)}</div>`:''}
       <div class="meta">${o.p?'<span class="pri">prioridade</span>':''}${o.w?`<span class="quando">🗓 ${esc(o.w)}</span>`:''}${o.u?`<a class="ref" href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.c||'link')}</a>`:''}</div></div></div>`}).join('');
-  el.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{st[cb.dataset.k]=cb.checked;save();cb.closest('.item').classList.toggle('done',cb.checked);kpis()}));
+  el.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{enviar(cb.dataset.k,cb.checked,cb.dataset.t);cb.closest('.item').classList.toggle('done',cb.checked);kpis()}));
 }
+function render(){LISTAS.forEach(a=>desenha(...a));kpis()}
 function kpis(){
   document.getElementById('k1').textContent=DADOS.hoje.length;
-  document.getElementById('k2').textContent=DADOS.hoje.filter((o,ix)=>st['hoje'+ix]).length;
+  document.getElementById('k2').textContent=DADOS.hoje.filter(o=>st['hoje-'+hash(o.t)]).length;
   const alvo=new Date(2026,10,27), h=new Date(); h.setHours(0,0,0,0);
   document.getElementById('k3').textContent=Math.max(0,Math.round((alvo-h)/864e5));
 }
@@ -300,13 +339,12 @@ document.getElementById('sub').textContent=DADOS.papel+' · atualizado '+DADOS.a
 document.getElementById('links').innerHTML=`<a href="${esc(DADOS.painel)}" target="_blank" rel="noopener">📊 Painel do time</a><a href="https://dev-seven7.github.io/direcionamento-expansao-olivers/" target="_blank" rel="noopener">🎥 Gravação de expansão</a>`;
 document.getElementById('foco').innerHTML='<b>Foco de hoje.</b> '+esc(DADOS.foco);
 const semana=[...DADOS.semana].sort((a,b)=>(b.p?1:0)-(a.p?1:0));
-if(DADOS.rotina){document.getElementById('secRotina').hidden=false;const dk=new Date().toISOString().slice(0,10);
-  const r=DADOS.rotina; lista('rotina'+dk,r,true,'rotina');}
+if(DADOS.rotina){document.getElementById('secRotina').hidden=false; lista('rot'+dk,DADOS.rotina,true,'rotina');}
 lista('hoje',DADOS.hoje,true);lista('semana',semana,true); lista('continuo',DADOS.continuo,false);
 const hojeTxt='Seg 23/11';
 document.getElementById('dias').innerHTML=DADOS.dias.map(([d,its])=>`<div class="dia${d===hojeTxt?' hoje':''}"><h3>${esc(d)}${d===hojeTxt?' · hoje':''}</h3><ul>${its.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
 document.getElementById('foot').textContent='Daily montada pelo THEO com a Manu · dúvidas, chama a Manu';
-kpis();
+kpis(); puxar(); setInterval(puxar,30000);
 </script>
 </body>
 </html>
