@@ -296,6 +296,7 @@ const DADOS = {
  "atualizado": "seg 23/11/2026 · 15h"
 };
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const linkify=s=>esc(s).replace(/(https:\/\/[^\s]+)/g,'<a class="ref" href="$1" target="_blank" rel="noopener">abrir link</a>');
 const API='https://checks-time-mkt.grupo-rob-mkt.workers.dev'+'/s/'+DADOS.id;
 const KEY='daily-'+DADOS.id+'-sync';
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){st={}}
