@@ -73,6 +73,11 @@
     <div class="kpi"><b id="k2">0</b><span>feitas hoje</span></div>
     <div class="kpi"><b id="k3">0</b><span>dias até a Black Friday</span></div>
   </div>
+  <section id="secRotina" hidden>
+    <h2>✅ Rotina obrigatória · hoje e todo dia</h2>
+    <p class="nota">Tarefa fixa, nos horários. O checklist zera sozinho a cada dia.</p>
+    <div class="lista" id="rotina"></div>
+  </section>
   <section>
     <h2>🔥 Hoje · segunda, 23/11</h2>
     <p class="nota">Marque o que for fazendo. Fica salvo só neste navegador; no fim do dia avise a Manu do que fechou.</p>
@@ -238,15 +243,15 @@ const DADOS = {
  ],
  "id": "otavio",
  "painel": "https://dev-seven7.github.io/time-marketing-rob/",
- "atualizado": "seg 23/11/2026 · 10h30"
+ "atualizado": "seg 23/11/2026 · 11h"
 };
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const KEY='daily-'+DADOS.id+'-2311';
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){st={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const linkify=s=>esc(s).replace(/(https:\/\/[^\s]+)/g,'<a class="ref" href="$1" target="_blank" rel="noopener">abrir link</a>');
-function lista(id,arr,check){
-  const el=document.getElementById(id);
+function lista(id,arr,check,elId){
+  const el=document.getElementById(elId||id);
   el.innerHTML=arr.map((o,ix)=>{
     const k=id+ix, done=!!st[k];
     return `<div class="item${done?' done':''}">${check?`<input type="checkbox" data-k="${k}"${done?' checked':''} aria-label="feito">`:''}
@@ -265,7 +270,9 @@ document.getElementById('sub').textContent=DADOS.papel+' · atualizado '+DADOS.a
 document.getElementById('links').innerHTML=`<a href="${esc(DADOS.painel)}" target="_blank" rel="noopener">📊 Painel do time</a><a href="https://dev-seven7.github.io/direcionamento-expansao-olivers/" target="_blank" rel="noopener">🎥 Gravação de expansão</a>`;
 document.getElementById('foco').innerHTML='<b>Foco de hoje.</b> '+esc(DADOS.foco);
 const semana=[...DADOS.semana].sort((a,b)=>(b.p?1:0)-(a.p?1:0));
-lista('hoje',DADOS.hoje,true); lista('semana',semana,true); lista('continuo',DADOS.continuo,false);
+if(DADOS.rotina){document.getElementById('secRotina').hidden=false;const dk=new Date().toISOString().slice(0,10);
+  const r=DADOS.rotina; lista('rotina'+dk,r,true,'rotina');}
+lista('hoje',DADOS.hoje,true);lista('semana',semana,true); lista('continuo',DADOS.continuo,false);
 const hojeTxt='Seg 23/11';
 document.getElementById('dias').innerHTML=DADOS.dias.map(([d,its])=>`<div class="dia${d===hojeTxt?' hoje':''}"><h3>${esc(d)}${d===hojeTxt?' · hoje':''}</h3><ul>${its.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
 document.getElementById('foot').textContent='Daily montada pelo THEO com a Manu · dúvidas, chama a Manu';
