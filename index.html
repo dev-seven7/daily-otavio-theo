@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Otávio</title>
+<style>
+  :root{
+    --bg:#0f1115; --surface:#171a21; --surface2:#1e222b; --line:#2a2f3a;
+    --txt:#e8eaed; --txt2:#9aa3b2; --txt3:#6b7483;
+    --todo:#ffa53d; --hot:#ff6b6b; --ok:#3ecf8e; --accent:#7c8cff;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f4f6fa; --surface:#fff; --surface2:#f0f3f8; --line:#e2e7f0;
+      --txt:#1a1d24; --txt2:#5a6474; --txt3:#8b94a5; --todo:#c76f00; --hot:#d63b3b; --ok:#14935a; --accent:#4a5ad8; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:48px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(135deg,#1b1f2b,#2a2140);border-bottom:1px solid var(--line);padding:26px 0 22px;margin-bottom:20px}
+  @media (prefers-color-scheme: light){header{background:linear-gradient(135deg,#2a2140,#3d2f5c)}}
+  header h1{margin:0;font-size:26px;letter-spacing:-.4px;color:#fff}
+  header .sub{color:#b9bfd0;font-size:14px;margin-top:4px}
+  header .links{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  header .links a{font-size:13px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:5px 10px}
+  header .links a:hover{background:rgba(255,255,255,.1)}
+  .foco{background:color-mix(in srgb,var(--hot) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--hot) 35%,var(--line));
+    border-radius:14px;padding:14px 16px;margin-bottom:18px;font-size:15px}
+  .foco b{color:var(--hot)}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 26px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+  .kpi b{display:block;font-size:24px;line-height:1.1}
+  .kpi span{font-size:11px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px}
+  section{margin-bottom:30px}
+  h2{font-size:19px;margin:0 0 4px}
+  .nota{font-size:13px;color:var(--txt3);margin:0 0 12px}
+  .lista{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:2px 16px}
+  .item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .item:last-child{border-bottom:none}
+  .item input{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);flex:none;cursor:pointer}
+  .item .b{flex:1;min-width:0}
+  .item .t{font-weight:600;font-size:15px}
+  .item.done .t{opacity:.45;text-decoration:line-through}
+  .item .n{font-size:13px;color:var(--txt2);margin-top:2px;overflow-wrap:anywhere}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+  .quando{font-size:12px;color:var(--txt3)}
+  .pri{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;background:color-mix(in srgb,var(--hot) 16%,transparent);color:var(--hot)}
+  a.ref{font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 8px;color:var(--accent);text-decoration:none}
+  a.ref:hover{border-color:var(--accent)}
+  .dias{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .dia{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .dia.hoje{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+  .dia h3{margin:0 0 6px;font-size:14px}
+  .dia ul{margin:0;padding-left:16px;font-size:13px;color:var(--txt2)}
+  .dia li{margin-bottom:4px}
+  @media (max-width:760px){.dias{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.kpi b{font-size:20px}}
+  footer{font-size:12px;color:var(--txt3);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1 id="h1"></h1>
+  <div class="sub" id="sub"></div>
+  <div class="links" id="links"></div>
+</div></header>
+<main class="wrap">
+  <div class="foco" id="foco"></div>
+  <div class="kpis">
+    <div class="kpi"><b id="k1">0</b><span>pra hoje</span></div>
+    <div class="kpi"><b id="k2">0</b><span>feitas hoje</span></div>
+    <div class="kpi"><b id="k3">0</b><span>dias até a Black Friday</span></div>
+  </div>
+  <section>
+    <h2>🔥 Hoje · segunda, 23/11</h2>
+    <p class="nota">Marque o que for fazendo. Fica salvo só neste navegador; no fim do dia avise a Manu do que fechou.</p>
+    <div class="lista" id="hoje"></div>
+  </section>
+  <section>
+    <h2>📅 Semana por dia · 23 a 27/11</h2>
+    <p class="nota">Visão rápida do que cai em cada dia.</p>
+    <div class="dias" id="dias"></div>
+  </section>
+  <section>
+    <h2>📦 Entregas da semana</h2>
+    <p class="nota">Tudo que precisa estar entregue até sexta, 27/11. As marcadas como prioridade vêm primeiro.</p>
+    <div class="lista" id="semana"></div>
+  </section>
+  <section>
+    <h2>🔁 Contínuo</h2>
+    <p class="nota">Rotina que segue rodando todo dia.</p>
+    <div class="lista" id="continuo"></div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+<script>
+const DADOS = {
+ "repo": "daily-otavio-theo",
+ "nome": "Otávio",
+ "emoji": "🎬",
+ "papel": "Produtor de Conteúdo · Grupo ROB",
+ "foco": "Hoje o que não pode passar: fechar os criativos da Ogro SG (o tráfego entra amanhã) e alinhar com a Luiza o que falta dos criativos Ghost.",
+ "hoje": [
+  {
+   "t": "Ogro SG: ajustes M5/M6, versões 4:5 e telas com o cupom OGROSG 10%",
+   "w": "finalizar hoje",
+   "c": "cs-ogro-steaks#37",
+   "u": "https://github.com/dev-seven7/cs-ogro-steaks/issues/37",
+   "n": "Junto com o Victor. O tráfego da Ogro SG entra ter 24/11.",
+   "p": true
+  },
+  {
+   "t": "Criativos Ghost de Copa, Lapa e Geral: alinhar com a Luiza o que já foi pro Celso e o que falta",
+   "w": "hoje",
+   "c": "cs-olivers#259",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/259",
+   "n": "Restante até sex 27/11.",
+   "p": true
+  },
+  {
+   "t": "Preparar a captação de amanhã: Sushitone (Temakeria) + Ogro Bells",
+   "w": "hoje",
+   "c": "cs-ogro-steaks#41",
+   "u": "https://github.com/dev-seven7/cs-ogro-steaks/issues/41",
+   "n": "Pauta, lista de takes e equipamento.",
+   "p": false
+  },
+  {
+   "t": "Black Friday Øliver's e Temakeria: começar a edição dos stories e criativos",
+   "w": "começar hoje",
+   "c": "cs-olivers#240",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/240",
+   "n": "Entrega até qua 25/11.",
+   "p": false
+  }
+ ],
+ "dias": [
+  [
+   "Seg 23/11",
+   [
+    "Criativos Ogro SG finalizados",
+    "Status dos criativos Ghost com a Luiza",
+    "Preparar captação",
+    "Call do time 11h20"
+   ]
+  ],
+  [
+   "Ter 24/11",
+   [
+    "Captação Sushitone + Ogro Bells",
+    "Edição da Black Friday"
+   ]
+  ],
+  [
+   "Qua 25/11",
+   [
+    "Black Friday Øliver's e Temakeria entregue",
+    "Reunião de MKT 14h às 17h"
+   ]
+  ],
+  [
+   "Qui 26/11",
+   [
+    "Cortes da gravação de expansão (se já gravou)",
+    "Vídeos do Réveillon",
+    "Presencial MKT + expansão 14h às 16h"
+   ]
+  ],
+  [
+   "Sex 27/11",
+   [
+    "Restante dos criativos Ghost entregue",
+    "Black Friday no ar"
+   ]
+  ]
+ ],
+ "semana": [
+  {
+   "t": "Black Friday Øliver's e Temakeria: edição dos stories e criativos",
+   "w": "até qua 25/11",
+   "c": "cs-olivers#240",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/240",
+   "n": "",
+   "p": true
+  },
+  {
+   "t": "Captação Sushitone (Temakeria) + Ogro Bells (Natal)",
+   "w": "ter 24/11",
+   "c": "cs-ogro-steaks#41",
+   "u": "https://github.com/dev-seven7/cs-ogro-steaks/issues/41",
+   "n": "",
+   "p": true
+  },
+  {
+   "t": "Criativos Ghost: restante de Copa, Lapa e Geral, junto com a Luiza",
+   "w": "até sex 27/11",
+   "c": "cs-olivers#259",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/259",
+   "n": "",
+   "p": true
+  },
+  {
+   "t": "Cortes legendados da gravação de expansão do Matheus (1 por praça)",
+   "w": "depois da gravação, esta semana",
+   "c": "cs-rob-food#127",
+   "u": "https://github.com/dev-seven7/cs-rob-food/issues/127",
+   "n": "Roteiro e praças no link do direcionamento: https://dev-seven7.github.io/direcionamento-expansao-olivers/",
+   "p": false
+  },
+  {
+   "t": "Vídeos do Réveillon Araruama (reedição do ano passado + novos)",
+   "w": "esta semana",
+   "c": "cs-olivers#160",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/160",
+   "n": "",
+   "p": false
+  },
+  {
+   "t": "Conteúdos pela pirâmide de Maslow (Øliver's e Temakeria)",
+   "w": "esta semana",
+   "c": "cs-olivers#240",
+   "u": "https://github.com/dev-seven7/cs-olivers/issues/240",
+   "n": "Temakeria na tmk#249.",
+   "p": false
+  }
+ ],
+ "continuo": [
+  {
+   "t": "Banco de vídeos das marcas organizado no Drive depois de cada captação",
+   "w": "",
+   "c": "",
+   "u": "",
+   "n": "",
+   "p": false
+  }
+ ],
+ "id": "otavio",
+ "painel": "https://dev-seven7.github.io/time-marketing-rob/",
+ "atualizado": "seg 23/11/2026 · 10h30"
+};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY='daily-'+DADOS.id+'-2311';
+let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const linkify=s=>esc(s).replace(/(https:\/\/[^\s]+)/g,'<a class="ref" href="$1" target="_blank" rel="noopener">abrir link</a>');
+function lista(id,arr,check){
+  const el=document.getElementById(id);
+  el.innerHTML=arr.map((o,ix)=>{
+    const k=id+ix, done=!!st[k];
+    return `<div class="item${done?' done':''}">${check?`<input type="checkbox" data-k="${k}"${done?' checked':''} aria-label="feito">`:''}
+      <div class="b"><div class="t">${esc(o.t)}</div>${o.n?`<div class="n">${linkify(o.n)}</div>`:''}
+      <div class="meta">${o.p?'<span class="pri">prioridade</span>':''}${o.w?`<span class="quando">🗓 ${esc(o.w)}</span>`:''}${o.u?`<a class="ref" href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.c||'link')}</a>`:''}</div></div></div>`}).join('');
+  el.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{st[cb.dataset.k]=cb.checked;save();cb.closest('.item').classList.toggle('done',cb.checked);kpis()}));
+}
+function kpis(){
+  document.getElementById('k1').textContent=DADOS.hoje.length;
+  document.getElementById('k2').textContent=DADOS.hoje.filter((o,ix)=>st['hoje'+ix]).length;
+  const alvo=new Date(2026,10,27), h=new Date(); h.setHours(0,0,0,0);
+  document.getElementById('k3').textContent=Math.max(0,Math.round((alvo-h)/864e5));
+}
+document.getElementById('h1').textContent=DADOS.emoji+' Daily '+DADOS.nome;
+document.getElementById('sub').textContent=DADOS.papel+' · atualizado '+DADOS.atualizado;
+document.getElementById('links').innerHTML=`<a href="${esc(DADOS.painel)}" target="_blank" rel="noopener">📊 Painel do time</a><a href="https://dev-seven7.github.io/direcionamento-expansao-olivers/" target="_blank" rel="noopener">🎥 Gravação de expansão</a>`;
+document.getElementById('foco').innerHTML='<b>Foco de hoje.</b> '+esc(DADOS.foco);
+const semana=[...DADOS.semana].sort((a,b)=>(b.p?1:0)-(a.p?1:0));
+lista('hoje',DADOS.hoje,true); lista('semana',semana,true); lista('continuo',DADOS.continuo,false);
+const hojeTxt='Seg 23/11';
+document.getElementById('dias').innerHTML=DADOS.dias.map(([d,its])=>`<div class="dia${d===hojeTxt?' hoje':''}"><h3>${esc(d)}${d===hojeTxt?' · hoje':''}</h3><ul>${its.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
+document.getElementById('foot').textContent='Daily montada pelo THEO com a Manu · dúvidas, chama a Manu';
+kpis();
+</script>
+</body>
+</html>
