@@ -80,7 +80,7 @@
     <div class="lista" id="rotina"></div>
   </section>
   <section>
-    <h2>🔥 Hoje · segunda, 23/11</h2>
+    <h2>🔥 Hoje · quarta, 25/11</h2>
     <p class="nota">Marque o que for fazendo: o check vai direto pra Manu. <span id="sync" class="sync"></span></p>
     <div class="lista" id="hoje"></div>
   </section>
@@ -107,63 +107,47 @@ const DADOS = {
  "nome": "Otávio",
  "emoji": "🎬",
  "papel": "Produtor de Conteúdo · Grupo ROB",
- "foco": "Hoje (combinado na call das 11h20): fechar os criativos da Ogro SG com o Victor (voz do Jimmy pelo ElevenLabs) e ajudar a Luiza com os 9 criativos Ghost até o fim do dia. Na semana: TODAS as edições fechadas até ter 24/11.",
+ "foco": "Hoje: fechar TODAS as edições da Black Friday (Øliver's, Ogro, Temakeria) e mandar no grupo pra revisão, interação em todas as contas e subir os posts do Grupo ROB (Instagram e LinkedIn).",
  "hoje": [
   {
-   "t": "Ogro SG: fechar os criativos hoje com o Victor",
-   "w": "hoje",
-   "c": "cs-ogro-steaks#37",
-   "u": "https://github.com/dev-seven7/cs-ogro-steaks/issues/37",
-   "n": "O da fala do Jimmy: clonar a voz no ElevenLabs pelo agente, a partir dos vídeos dele no Drive (pasta de expansão do ROB e da Ogro). Não precisa ser idêntica. As 2 alterações do Victor também fecham hoje. O de entrega em SG fica pra gravação.",
+   "t": "Black Friday: finalizar TODAS as edições (Øliver's, Ogro e Temakeria) e mandar no grupo pra revisão",
+   "w": "hoje, até o fim do dia",
+   "c": "",
+   "u": "",
+   "n": "Prioridade nº 1 do dia.",
    "p": true
   },
   {
-   "t": "Criativos Ghost: ajudar a Luiza a fechar os 9 que faltam (3 de Copa, 3 da Lapa e 3 do Geral) pro Celso",
-   "w": "até o fim do dia",
-   "c": "cs-olivers#259",
-   "u": "https://github.com/dev-seven7/cs-olivers/issues/259",
-   "n": "",
-   "p": true
-  },
-  {
-   "t": "Influs de SG: jogar no agente a lista da Luiza (quem foi contatado e quem confirmou o dia 04/12)",
-   "w": "hoje",
-   "c": "cs-ogro-steaks#14",
-   "u": "https://github.com/dev-seven7/cs-ogro-steaks/issues/14",
+   "t": "Interação em TODAS as contas: comentários respondidos",
+   "w": "ao longo do dia",
+   "c": "",
+   "u": "",
    "n": "",
    "p": false
   },
   {
-   "t": "Teaser do Réveillon: apoiar a Luiza se ela precisar (imagens do ano passado, 10 a 15s)",
-   "w": "hoje",
-   "c": "cs-olivers#160",
-   "u": "https://github.com/dev-seven7/cs-olivers/issues/160",
+   "t": "Stories entrando no horário certo, conforme a rotina",
+   "w": "nos horários da rotina",
+   "c": "",
+   "u": "",
    "n": "",
    "p": false
   },
   {
-   "t": "Captação de amanhã · Ogro Black: planos da fita crepe (Reels 1) e do carimbo (Reels 2 e mix de sexta)",
-   "w": "preparar hoje",
-   "c": "caderno Ogro · Black",
-   "u": "https://dev-seven7.github.io/caderno-victorpob/#black-aquec",
-   "n": "Material: carimbo de borracha com o preço, fita crepe, papel kraft, moedas e o P.C.Q igual à foto oficial. Roteiro tempo a tempo no caderno.",
-   "p": true
-  },
-  {
-   "t": "Captação de amanhã: planos, takes e ideias de vídeo pro SushiTone, o Ogro Bells e a Black Friday",
-   "w": "preparar hoje",
-   "c": "roteiro da captação",
-   "u": "https://dev-seven7.github.io/captacao-natal-24-11/",
-   "n": "Conferir equipamento e luz.",
-   "p": true
-  },
-  {
-   "t": "Edições da semana: listar tudo que está aberto e começar a fechar",
+   "t": "Analisar os últimos posts e engajar com social ativo",
    "w": "hoje",
    "c": "",
    "u": "",
-   "n": "Prazo de TODAS as edições: ter 24/11, pra Luiza agendar.",
+   "n": "",
    "p": false
+  },
+  {
+   "t": "Grupo ROB: subir os criativos que a Manu mandou no grupo desde quinta passada, no Instagram e no LinkedIn",
+   "w": "hoje",
+   "c": "",
+   "u": "",
+   "n": "Nenhum saiu ainda. Inclui o vídeo do Mathias no podcast.",
+   "p": true
   }
  ],
  "dias": [
@@ -186,6 +170,8 @@ const DADOS = {
   [
    "Qua 25/11",
    [
+    "Edições BF das 3 marcas no grupo pra revisão",
+    "Posts do Grupo ROB (Insta + LinkedIn)",
     "Fotos e vídeos da captação: seleção e edição",
     "Ogro: editar o Reels 2 “O carimbo chegou”",
     "Reunião de MKT 14h às 17h"
@@ -293,7 +279,7 @@ const DADOS = {
  ],
  "id": "otavio",
  "painel": "https://dev-seven7.github.io/time-marketing-rob/",
- "atualizado": "seg 23/11/2026 · 15h"
+ "atualizado": "qua 25/11/2026 · 12h11"
 };
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const linkify=s=>esc(s).replace(/(https:\/\/[^\s]+)/g,'<a class="ref" href="$1" target="_blank" rel="noopener">abrir link</a>');
@@ -342,7 +328,7 @@ document.getElementById('foco').innerHTML='<b>Foco de hoje.</b> '+esc(DADOS.foco
 const semana=[...DADOS.semana].sort((a,b)=>(b.p?1:0)-(a.p?1:0));
 if(DADOS.rotina){document.getElementById('secRotina').hidden=false; lista('rot'+dk,DADOS.rotina,true,'rotina');}
 lista('hoje',DADOS.hoje,true);lista('semana',semana,true); lista('continuo',DADOS.continuo,false);
-const hojeTxt='Seg 23/11';
+const hojeTxt='Qua 25/11';
 document.getElementById('dias').innerHTML=DADOS.dias.map(([d,its])=>`<div class="dia${d===hojeTxt?' hoje':''}"><h3>${esc(d)}${d===hojeTxt?' · hoje':''}</h3><ul>${its.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
 document.getElementById('foot').textContent='Daily montada pelo THEO com a Manu · dúvidas, chama a Manu';
 kpis(); puxar(); setInterval(puxar,30000);
